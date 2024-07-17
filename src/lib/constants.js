@@ -1,0 +1,7 @@
+export const STATUS = Object.freeze({
+  NO_URL: "NO URL",
+  SEARCHING: "SEARCHING",
+  CHECKING: "CHECKING",
+  ONLINE: "ONLINE",
+  OFFLINE: "OFFLINE",
+})
