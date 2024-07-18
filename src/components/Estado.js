@@ -6,10 +6,10 @@ export default function Estado({ status }) {
       <div
         className={`circle 
           ${status === STATUS.NO_URL ? "no-url" : " "}
-          ${status === STATUS.SEARCHING ? "searching" : " "}
+          ${status === STATUS.SEARCHING ? "searching animated flash" : " "}
           ${status === STATUS.CHECKING ? "loading animated flash" : " "}
           ${status === STATUS.ONLINE ? "online" : " "}
-          ${status === STATUS.OFFLINE ? "offline animated flash" : " "}`}
+          ${status === STATUS.OFFLINE ? "offline notanimated blink" : " "}`}
       ></div>
       <h4 className="h4-online">{status}</h4>
     </div>

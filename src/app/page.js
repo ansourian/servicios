@@ -1,7 +1,7 @@
-"use client"
-import Servicio from "@/components/Servicio"
-import { STATUS } from "@/lib/constants"
-import { useState } from "react"
+"use client";
+import Servicio from "@/components/Servicio";
+import { STATUS } from "@/lib/constants";
+import { useState } from "react";
 
 const SERVICIOS = [
   {
@@ -91,7 +91,7 @@ const SERVICIOS = [
       },
     ],
   },
-]
+];
 
 export default function Home() {
   const [servicesStatus, setServicesStatus] = useState(() =>
@@ -106,41 +106,41 @@ export default function Home() {
         )
       )
     )
-  )
+  );
 
   function getHealthCheckURL(msId) {
     for (const service of SERVICIOS) {
-      const ms = service.ms.find((ms) => ms.id === msId)
+      const ms = service.ms.find((ms) => ms.id === msId);
       if (ms) {
-        return ms.healthCheckURL
+        return ms.healthCheckURL;
       }
     }
-    return null // Return null if no matching id is found
+    return null; // Return null if no matching id is found
   }
 
   function updateState(update) {
-    setServicesStatus((prev) => ({ ...prev, ...update }))
+    setServicesStatus((prev) => ({ ...prev, ...update }));
   }
 
   const updateStatus = async (msId) => {
-    updateState({ [msId]: STATUS.CHECKING })
-    const url = getHealthCheckURL(msId)
+    updateState({ [msId]: STATUS.CHECKING });
+    const url = getHealthCheckURL(msId);
     if (url) {
       try {
-        const response = await fetch(url)
+        const response = await fetch(url);
         if (response.ok) {
-          updateState({ [msId]: STATUS.ONLINE })
+          updateState({ [msId]: STATUS.ONLINE });
         } else {
-          updateState({ [msId]: STATUS.OFFLINE })
+          updateState({ [msId]: STATUS.OFFLINE });
         }
       } catch (e) {
-        console.error(e)
-        updateState({ [msId]: STATUS.OFFLINE })
+        console.error(e);
+        updateState({ [msId]: STATUS.OFFLINE });
       }
     } else {
-      updateState({ [msId]: STATUS.NO_URL })
+      updateState({ [msId]: STATUS.NO_URL });
     }
-  }
+  };
 
   return (
     <main>
@@ -158,5 +158,5 @@ export default function Home() {
         ))}
       </section>
     </main>
-  )
+  );
 }

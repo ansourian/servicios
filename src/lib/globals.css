@@ -135,6 +135,14 @@ h4{
   background: #FCD266;
 }
 
+.circle.searching {
+  background: #66d1fc;
+}
+
+.circle.no-url {
+  background: #ffffff;
+}
+
 .row{
   display: flex;
   flex-direction: row;
@@ -170,7 +178,7 @@ article{
   flex-wrap: wrap;
 }
 
-/* ANIMACIÓN OFFLINE */
+/* ANIMACIÓN LOADING */
 
 .animated {
  -webkit-animation-duration: 2s;
