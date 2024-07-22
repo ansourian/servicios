@@ -16,7 +16,7 @@ export default function Servicio({ servicio, actualStatus, updateStatus }) {
       <hr />
       <div className="div-microservicios">
         {servicio.ms.map((microservicio, i) => (
-          <>
+          <div key={i} className="row">
             <Microservicio
               name={microservicio.name}
               status={actualStatus[microservicio.id]}
@@ -24,7 +24,7 @@ export default function Servicio({ servicio, actualStatus, updateStatus }) {
             {servicio.ms.length !== i + 1 ? (
               <hr className="vertical-hr" />
             ) : null}
-          </>
+          </div>
         ))}
       </div>
     </article>

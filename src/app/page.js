@@ -1,99 +1,12 @@
-"use client";
-import Servicio from "@/components/Servicio";
-import { STATUS } from "@/lib/constants";
-import { useState } from "react";
-
-const SERVICIOS = [
-  {
-    name: "MEEP",
-    ms: [
-      {
-        id: "meep-ms-seguridad",
-        name: "MS - Seguridad",
-        healthCheckURL:
-          "http://ms-seguridad-manejo-eficiente-espacio-publico-dev.apps.ocp4-dev.gcba.gob.ar/health-check",
-      },
-      {
-        id: "meep-ms-usuarios",
-        name: "MS - Usuarios",
-        healthCheckURL:
-          "http://ms-usuarios-manejo-eficiente-espacio-publico-dev.apps.ocp4-dev.gcba.gob.ar/health-check",
-      },
-      {
-        id: "meep-ms-clavevereda",
-        name: "MS - ClaveVereda",
-        healthCheckURL:
-          "http://ms-claveveredeador-manejo-eficiente-espacio-publico-dev.apps.ocp4-dev.gcba.gob.ar/health-check",
-      },
-      {
-        id: "meep-ms-sap",
-        name: "MS - Sap",
-        healthCheckURL:
-          "http://ms-sap-manejo-eficiente-espacio-publico-dev.apps.ocp4-dev.gcba.gob.ar/health-check",
-      },
-    ],
-  },
-  {
-    name: "SAP",
-    ms: [
-      { id: "sap-ms-consulta", name: "MS - Consulta", healthCheckURL: "" },
-      {
-        id: "sap-ms-actualizacion",
-        name: "MS - Actualizacion",
-        healthCheckURL: "",
-      },
-    ],
-  },
-  {
-    name: "Firma",
-    ms: [{ id: "ms-firma", name: "MS - Firma", healthCheckURL: "" }],
-  },
-  {
-    name: "GRA",
-    ms: [{ id: "ms-firma", name: "MS - GRA", healthCheckURL: "" }],
-  },
-  {
-    name: "SIGEP",
-    ms: [
-      { id: "sigep-ms-seguridad", name: "MS - Seguridad", healthCheckURL: "" },
-      { id: "sigep-ms-usuarios", name: "MS - Usuarios", healthCheckURL: "" },
-      {
-        id: "sigep-ms-integracionsap",
-        name: "MS - IntegracionSap",
-        healthCheckURL: "",
-      },
-      { id: "sigep-ms-permisos", name: "MS - Permisos", healthCheckURL: "" },
-      { id: "sigep-ms-obras", name: "MS - Obras", healthCheckURL: "" },
-      { id: "sigep-ms-aperturas", name: "MS - Aperturas", healthCheckURL: "" },
-      {
-        id: "sigep-ms-relevamientos",
-        name: "MS - Relevamientos",
-        healthCheckURL: "",
-      },
-      { id: "sigep-ms-oficios", name: "MS - Oficios", healthCheckURL: "" },
-      {
-        id: "sigep-ms-planificacion",
-        name: "MS - Planificacion",
-        healthCheckURL: "",
-      },
-      {
-        id: "sigep-ms-fiscalizacion",
-        name: "MS - Fiscalizacion",
-        healthCheckURL: "",
-      },
-      { id: "sigep-ms-arbolado", name: "MS - Arbolado", healthCheckURL: "" },
-      { id: "sigep-ms-pluviales", name: "MS - Pluviales", healthCheckURL: "" },
-      { id: "sigep-ms-aceras", name: "MS - Aceras", healthCheckURL: "" },
-      {
-        id: "sigep-ms-quecomemos",
-        name: "MS - QueComemos",
-        healthCheckURL: "",
-      },
-    ],
-  },
-];
+"use client"
+import Servicio from "@/components/Servicio"
+import { STATUS } from "@/lib/constants"
+import { SERVICIOS } from "@/lib/data"
+import { useEffect, useState } from "react"
+import RefreshIcon from "@mui/icons-material/Refresh"
 
 export default function Home() {
+  const [enviroment, setEnviroment] = useState("PROD")
   const [servicesStatus, setServicesStatus] = useState(() =>
     Object.assign(
       {},
@@ -106,51 +19,96 @@ export default function Home() {
         )
       )
     )
-  );
+  )
 
-  function getHealthCheckURL(msId) {
+  useEffect(() => {
+    updateAll()
+  }, [enviroment])
+
+  function updateAll() {
+    Object.keys(servicesStatus).forEach((msId) => updateStatus(msId))
+  }
+
+  function getMS(msId) {
     for (const service of SERVICIOS) {
-      const ms = service.ms.find((ms) => ms.id === msId);
-      if (ms) {
-        return ms.healthCheckURL;
-      }
+      const ms = service.ms.find((ms) => ms.id === msId)
+      if (ms) return ms
     }
-    return null; // Return null if no matching id is found
+    return null
   }
 
   function updateState(update) {
-    setServicesStatus((prev) => ({ ...prev, ...update }));
+    setServicesStatus((prev) => ({ ...prev, ...update }))
   }
 
   const updateStatus = async (msId) => {
-    updateState({ [msId]: STATUS.CHECKING });
-    const url = getHealthCheckURL(msId);
-    if (url) {
-      try {
-        const response = await fetch(url);
-        if (response.ok) {
-          updateState({ [msId]: STATUS.ONLINE });
-        } else {
-          updateState({ [msId]: STATUS.OFFLINE });
+    updateState({ [msId]: STATUS.CHECKING })
+    const ms = getMS(msId)
+    console.log(msId, ms)
+    if (ms) {
+      if (!ms.healthCheckEP) {
+        updateState({ [msId]: STATUS.NO_EP })
+      } else if (!ms.enviroments[enviroment]) {
+        updateState({ [msId]: STATUS.NO_ENV })
+      } else {
+        try {
+          const response = await fetch(
+            `${ms.enviroments[enviroment]}${ms.healthCheckEP}`
+          )
+          console.log(`${ms.name} (${enviroment}) =>`, response)
+          if (response.ok) {
+            updateState({ [msId]: STATUS.ONLINE })
+          } else {
+            updateState({ [msId]: `${STATUS.OFFLINE} (${response.status})` })
+          }
+        } catch (e) {
+          console.error(e)
+          updateState({ [msId]: `${STATUS.OFFLINE} (${e.status})` })
         }
-      } catch (e) {
-        console.error(e);
-        updateState({ [msId]: STATUS.OFFLINE });
       }
-    } else {
-      updateState({ [msId]: STATUS.NO_URL });
     }
-  };
+  }
 
   return (
     <main>
       <header>
-        <h1>SIM</h1>
-        <h2>Sistema Interno de Monitoreo</h2>
+        <div className="column">
+          <div className="row">
+            <h1>SIM</h1>
+            <h1 className="h1-branch">({enviroment})</h1>
+          </div>
+          <h2>Sistema Interno de Monitoreo</h2>
+        </div>
+        <div className="div-buttons-header row">
+          <button className="button-refresh" onClick={() => updateAll()}>
+            <p className="p-button-refresh">Actualizar</p>
+            <RefreshIcon className="refresh-icon2" />
+          </button>
+          <div className="dropdown">
+            <select
+              className="dropdown-button"
+              onChange={(e) => setEnviroment(e.target.value)}
+            >
+              <option className="dropdown-content" value={"PROD"}>
+                PROD
+              </option>
+              <option className="dropdown-content" value={"HML"}>
+                HML
+              </option>
+              <option className="dropdown-content" value={"QA"}>
+                QA
+              </option>
+              <option className="dropdown-content" value={"DEV"}>
+                DEV
+              </option>
+            </select>
+          </div>
+        </div>
       </header>
       <section>
-        {SERVICIOS.map((servicio) => (
+        {SERVICIOS.map((servicio, i) => (
           <Servicio
+            key={i}
             servicio={servicio}
             actualStatus={servicesStatus}
             updateStatus={updateStatus}
@@ -158,5 +116,5 @@ export default function Home() {
         ))}
       </section>
     </main>
-  );
+  )
 }

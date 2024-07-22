@@ -5,13 +5,16 @@ header{
     background-color: #ffffff;
     border-top: #fdd306 10px solid;
     padding-bottom: 2vw;
-    padding: 2vw 1vw;
+    padding: 1vw 4vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 body{
     background-color: #e5e5e5;
     max-width: 100vw;
-    overflow: hidden;
+    overflow-x: hidden;
     margin: 0;
 }
 
@@ -41,8 +44,13 @@ hr{
 h1{
     font-size: 3vw;
     font-family: "Montserrat", sans-serif;
-    margin: 0 2vw;
     color: #333;
+    margin: 0vw;
+}
+
+.h1-branch{
+  margin-left: 1vw;
+  color: #818181;
 }
 
 h2{
@@ -50,7 +58,7 @@ h2{
     font-size: 1.5vw;
     font-family: "Nunito", sans-serif;
     font-weight: 800;
-    margin: 0 2vw;
+    margin: 0vw;
 }
 
 h3{
@@ -68,6 +76,13 @@ h4{
   font-size: 0.8vw;
 }
 
+.p-button-refresh{
+  font-size: 1vw;
+  font-family: "Nunito", sans-serif;
+  font-weight: 800;
+  margin: 0 0.5vw;
+}
+
 .refresh-icon{
   color: #ffffff;
   cursor: pointer;
@@ -76,6 +91,31 @@ h4{
 
 .refresh-icon:hover{
   color: #FCD266;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.refresh-icon2{
+  cursor: pointer;
+}
+
+.button-refresh{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: #007bc7;
+  background-color: #ffffff00;
+  cursor: pointer;
+  border: 2px solid #007bc7;
+  border-radius: 10px;
+  padding: 0 1vw;
+  margin: 1.5vw 1vw;
+}
+
+.button-refresh:hover{
+  background-color: #007bc721;
+  border: 2px solid #ffffff00;
   cursor: pointer;
   transition: 0.5s;
 }
@@ -139,7 +179,11 @@ h4{
   background: #66d1fc;
 }
 
-.circle.no-url {
+.circle.no-env {
+  background: #ffffff;
+}
+
+.circle.no-ep {
   background: #ffffff;
 }
 
@@ -167,7 +211,7 @@ section{
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  margin: 6vw;
+  margin: 4vw 6vw;
 }
 
 article{
@@ -178,7 +222,7 @@ article{
   flex-wrap: wrap;
 }
 
-/* ANIMACIÓN LOADING */
+/* ANIMACIÓN CIRCULO LOADING */
 
 .animated {
  -webkit-animation-duration: 2s;
@@ -207,4 +251,46 @@ article{
 .flash {
  -webkit-animation-name: flash;
  animation-name: flash;
+}
+
+.div-buttons-header{
+  display: flex;
+  margin: 0;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  align-items: center;
+  margin: 1.5vw 0;
+}
+
+.dropdown-button:focus-visible{
+  outline: none;
+}
+
+.dropdown-button {
+  background-color: #007bc7;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  font-family: "Nunito", sans-serif;
+}
+
+.dropdown-content {
+  position: absolute;
+  background-color: #ffffff;
+  color: #000000;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 5px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }
