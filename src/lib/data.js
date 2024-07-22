@@ -68,7 +68,7 @@ export const SERVICIOS = [
           enviroments: {
             PROD: "",
             HML: "",
-            QA: "",
+            QA: "https://firma-digital-mephu-back-qa.gcba.gob.ar",
             DEV: "https://firma-digital-mephu-back-dev.gcba.gob.ar",
           },
           healthCheckEP: "/check_ok",
