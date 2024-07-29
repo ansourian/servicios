@@ -72,7 +72,7 @@ export default function Home() {
   return (
     <main>
       <header>
-        <div className="column">
+        <div className="column div-title">
           <div className="row">
             <h1>SIM</h1>
             <h1 className="h1-branch">({enviroment})</h1>
