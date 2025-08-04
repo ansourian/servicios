@@ -224,7 +224,7 @@ article {
   margin: 1vw;
   border-radius: 10px;
   min-width: 12vw;
-  box-shadow: 4px 8px 9px 0px #888888bd;
+  box-shadow: 0px 4px 9px 0px #888888bd;
   flex-wrap: wrap;
 }
 
